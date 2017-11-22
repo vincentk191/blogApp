@@ -2,8 +2,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
-const session = require('express-session')
+const session = require('express-session');
+const bcrypt = require('bcrypt');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
 
 //-----------------CONFIGURATION------------------
 const sequelize = new Sequelize('blogapp', process.env.POSTGRES_USER, null, {
@@ -130,14 +132,19 @@ app.post('/login', (req, res) => {
    User.findOne({
       where: {
          username: username,
-         password: password
       }
    }).then((loggeduser) => {
       if (loggeduser != null) {
-         req.session.user = loggeduser;
-         res.redirect('/?message='+'You are now logged in!');
+         bcrypt.compare(password, loggeduser.password, (err,data) => {
+            if (err) {
+               throw err;
+            } else {
+               req.session.user = loggeduser;
+               res.redirect('/?message='+'You are now logged in!');
+            }
+         });
       } else {
-         res.redirect('/login/?message=' + 'Incorrect username or password!')
+         res.redirect('/login/?message=' + 'Username does not exist!')
       }
    });
 });
@@ -154,14 +161,20 @@ app.post('/users/new', (req, res) => {
    const password = req.body.password1;
    const email = req.body.email;
 
-   User.create({
-      username: username,
-      password: password,
-      email: email
-   }).then((loggeduser) => {
-      req.session.user = loggeduser;
-      res.redirect(`/`);
-   }).catch(console.error());
+   bcrypt.hash(password, 8, (err,hash) => {
+      if (err) {
+         throw err;
+      } else {
+         User.create({
+            username: username,
+            password: hash,
+            email: email
+         }).then((loggeduser) => {
+            req.session.user = loggeduser;
+            res.redirect(`/`);
+         }).catch(console.error());
+      }
+   });
 });
 
 // Add a topic
@@ -192,10 +205,6 @@ app.post('/topic/add' , (req,res) => {
    const userId = req.session.user.id;
    const title = req.body.title;
    const info = req.body.body;
-
-   console.log(userId);
-   console.log(title);
-   console.log(info);
 
    Topic.create({
       title: title,
@@ -292,7 +301,6 @@ app.get('/users/:id', (req, res) => {
       })
    ])
    .then(data => {
-      console.log(data[1]);
       res.render('profile', {
          loggeduser: loggeduser,
          user: data[0].dataValues,

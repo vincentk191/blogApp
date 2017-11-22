@@ -4,10 +4,14 @@ A website that allows people to post comments and topics to a page.
 
 > _Commented out lines are left due to some additional functionalities I would like to work on._
 
-### Features:
-   - Post messages
-   - Create topics
-   - View other posts by other users or your own
+### Added Features:
+   - BCrypt
+   - Data validation:
+      - Username field cannot be empty and must be unique  
+
+      - Password field cannot be empty and must contain at least 8 characters
+
+      - For registration, the 'confirm password' and 'password' fields must match each other
 
 ## Prerequisites
 
