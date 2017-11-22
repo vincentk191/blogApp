@@ -1,0 +1,31 @@
+doctype html
+html
+   head
+      title
+      meta(charset='utf-8')
+      meta(name="viewport" content="width=device-width, initial-scale=1")
+      link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
+      script(src="js/uikit.min.js")
+      script(src="js/uikit-icons.min.js")
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+   body.container-fluid
+      nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
+         .uk-navbar-left
+            ul.uk-navbar-nav#navigation
+               li
+                  a(href='/') Blog app
+         .uk-navbar-right
+            ul.uk-navbar-nav#navigation
+               li
+                  a(href=`/users/${loggeduser.id}`) My Profile
+               li
+                  a(href='/logout') Logout
+      form(action='/topic/add', method='POST', style="margin-left: 10px")
+         fieldset.uk-fieldset
+            legend.uk-legend Add a topic
+            .uk-margin
+               input.uk-input(type='text', name='title', placeholder='Title')
+            .uk-margin
+               textarea.uk-textarea(rows='5', name='body', placeholder='Body')
+         button.uk-button.uk-button-default(type='submit') Submit
+            

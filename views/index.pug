@@ -1,0 +1,80 @@
+doctype html
+html
+   head
+      title
+      meta(charset='utf-8')
+      meta(name="viewport" content="width=device-width, initial-scale=1")
+      link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
+      script(src="js/uikit.min.js")
+      script(src="js/uikit-icons.min.js")
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+   body.container-fluid
+      if loggeduser
+         nav.uk-navbar-container(uk-navbar='mode: click')
+            .uk-navbar-left
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/') Blog app
+            .uk-navbar-right
+               ul.uk-navbar-nav#navigation
+                  //- div
+                  //-    a.uk-navbar-toggle(uk-search-icon='', href='#')
+                  //-    .uk-drop(uk-drop='mode: click; pos: left-center; offset: 0')
+                  //-       form.uk-search.uk-search-navbar.uk-width-1-1
+                  //-          input.uk-search-input(type='search', placeholder='Search', autofocus='')
+                  li
+                     a(href=`/users/${loggeduser.id}`) My Profile
+                  li
+                     a(href=`/logout`) Sign Out
+      else 
+         nav.uk-navbar-container(uk-navbar='mode: click')
+            .uk-navbar-left
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/') Blog app
+            .uk-navbar-right
+               ul.uk-navbar-nav#navigation
+                  //- div
+                  //-    a.uk-navbar-toggle(uk-search-icon='', href='#')
+                  //-    .uk-drop(uk-drop='mode: click; pos: left-center; offset: 0')
+                  //-       form.uk-search.uk-search-navbar.uk-width-1-1
+                  //-          input.uk-search-input(type='search', placeholder='Search', autofocus='')
+                  li
+                     a(href='/login') Login
+                  li
+                     a(href='/users/new') Sign up
+      .row(style='margin-left: 10px')
+         .col-10
+            h1.display-4 Topics
+               if loggeduser
+                  h3.display-1 Hello #{loggeduser.username}!
+            br
+            if message
+               .uk-alert-success(uk-alert='')
+                  a.uk-alert-close(uk-close='')
+                  p= message
+            if loggeduser
+               .uk-margin
+                  a.uk-button.uk-button-default(href='/topic/add') Add Topic
+         hr
+         table.uk-table.uk-table-justify.uk-table-divider
+            thead
+               tr
+                  th.uk-width-small Username
+                  th Topic
+                  th Body
+            tbody
+               each topic in topics
+                  tr
+                     td
+                        a.uk-link.uk-button-text(href=`/users/${topic.dataValues.user.id}`)= topic.dataValues.user.username
+                     td
+                        a.uk-link-reset(href=`/topic/${topic.id}`) #{topic.title}
+                     td
+                        | #{topic.info.slice(0,200)}
+                        span ...
+                        p Posted at #{topic.createdAt}
+   .uk-section.uk-section-default
+      .uk-container
+         h3 
+         .uk-grid-match(class='uk-child-width-1-3@m', uk-grid='')

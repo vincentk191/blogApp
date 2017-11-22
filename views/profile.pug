@@ -1,0 +1,92 @@
+doctype html
+html
+   head
+      title
+      meta(charset='utf-8')
+      meta(name="viewport" content="width=device-width, initial-scale=1")
+      link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
+      script(src="js/uikit.min.js")
+      script(src="js/uikit-icons.min.js")
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+   body.container-fluid
+      if loggeduser
+         nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
+            .uk-navbar-left
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/') Blog app
+            .uk-navbar-right
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href=`/users/${loggeduser.id}`) My Profile
+                  li
+                     a(href=`/logout`) Sign Out
+      else 
+         nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
+            .uk-navbar-left
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/') Blog app
+            .uk-navbar-right
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/login') Login
+                  li
+                     a(href='/users/new') Sign up
+      .row(style='margin-left: 10px')
+         h1.display-4 #{user.username}
+         //- if delete
+         //-    button.uk-button.uk-button-danger Delete Account
+         ul.uk-subnav.uk-subnav-pill(uk-switcher='animation: uk-animation-fade')
+            li
+               a#topics Topics
+            li
+               a#comments Comments
+         ul.uk-switcher.uk-margin
+            li Hello!
+            li Hello again!
+         table.uk-table.uk-table-justify.uk-table-divider#topicsTable
+            thead
+               tr
+                  th Topic
+                  th Info
+            tbody
+               each topic in topics
+                  tr
+                     td
+                        a.uk-link-reset(href=`/topic/${topic.id}`) #{topic.dataValues.title}
+                     td
+                        | #{topic.dataValues.info.slice(0,200)}
+                        span ...
+                        p Posted at #{topic.dataValues.createdAt}
+         table.uk-table.uk-table-justify.uk-table-divider#commentsTable
+            thead
+               tr
+                  th Topic
+                  th Comment
+            tbody
+               each comment in comments
+                  tr
+                     td
+                        a.uk-link-reset(href=`/topic/${comment.dataValues.topicId}`) #{comment.dataValues.info}
+                     td
+                        | #{comment.dataValues.info.slice(0,200)}
+                        span ...
+                        p Posted at #{comment.dataValues.createdAt}
+   .uk-section.uk-section-default
+      .uk-container
+         h3 
+         .uk-grid-match(class='uk-child-width-1-3@m', uk-grid='')
+   script.
+      $(document).ready(function(){
+         $('table#commentsTable').hide();
+         
+         $('a#comments').click(function(){
+            $('table#topicsTable').hide(300);
+            $('table#commentsTable').show(300);
+         });
+         $('a#topics').click(function(){
+            $('table#commentsTable').hide(300);
+            $('table#topicsTable').show(300);
+         });
+      });

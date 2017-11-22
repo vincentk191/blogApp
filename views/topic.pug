@@ -1,0 +1,79 @@
+doctype html
+html
+   head
+      title
+      meta(charset='utf-8')
+      meta(name="viewport" content="width=device-width, initial-scale=1")
+      link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
+      script(src="js/uikit.min.js")
+      script(src="js/uikit-icons.min.js")
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+   body.container-fluid
+      if user
+         nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
+            .uk-navbar-left
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/') Blog app
+            .uk-navbar-right
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href=`/users/${loggeduser.id}`) My Profile
+                  li
+                     a(href=`/logout`) Sign Out
+      else 
+         nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
+            .uk-navbar-left
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/') Blog app
+            .uk-navbar-right
+               ul.uk-navbar-nav#navigation
+                  li
+                     a(href='/login') Login
+                  li
+                     a(href='/users/new') Sign up
+      .row(style="margin-left: 10px")
+         article.uk-article
+            h1.uk-article-title= topic.title
+            p.uk-article-meta Written by #{topic.user.dataValues.username} at 
+               span= topic.createdAt
+            p.uk-text-lead(style='white-space: pre-wrap') #{topic.info}
+            br
+            hr
+            .uk-grid-small.uk-child-width-auto(uk-grid)
+               div
+                  a.uk-button.uk-button-text Comments: <bold> #{comments.length} </bold>
+            br
+            .comments
+               each comment in comments
+                  article.uk-comment
+                     header.uk-comment-header.uk-grid-medium.uk-flex-middle(uk-grid='')
+                        h4.uk-comment-title.uk-margin-remove
+                           a.uk-link-reset(href=`/users/${comment.user.dataValues.id}`) #{comment.user.dataValues.username}
+                           ul.uk-comment-meta.uk-subnav.uk-subnav-divider.uk-margin-remove-top
+                              li #{comment.createdAt}
+                     .uk-comment-body
+                        p= comment.info
+                  hr.uk-divider-icon
+               if user
+                  form.uk-grid-small(method='POST', action=`/topic/${topic.id}/add` uk-grid)
+                     .uk-margin
+                        div(class='uk-width-1-2@s')
+                           span.uk-form-icon(uk-icon='icon: pencil')
+                           input.uk-input(name='comment', type='text' placeholder='Comment' style="font-size: 15px" autocomplete='off')
+                           button.uk-button.uk-button-default(type='submit') SEND
+      .uk-section.uk-section-default
+         .uk-container
+            h3 
+            .uk-grid-match(class='uk-child-width-1-3@m', uk-grid='')
+      script.
+         $(document).ready(function(){
+            
+            /*Comments hide and show function*/
+            $('.comments').hide();
+            $('a.uk-button.uk-button-text').click(function(){
+               $('.comments').slideToggle(300);
+            })
+            
+         });

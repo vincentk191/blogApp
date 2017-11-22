@@ -1,0 +1,40 @@
+doctype html
+html
+   head
+      title
+      meta(charset='utf-8')
+      meta(name="viewport" content="width=device-width, initial-scale=1")
+      link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
+      script(src="js/uikit.min.js")
+      script(src="js/uikit-icons.min.js")
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+   body.container-fluid
+      nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
+         .uk-navbar-left
+            ul.uk-navbar-nav#navigation
+               li
+                  a(href='/') Blog app
+         .uk-navbar-right
+            ul.uk-navbar-nav#navigation
+               li
+                  a(href='/users/new') Sign up
+      .row(style='margin-left: 10px')
+         h1.display-1 Login
+         if message
+            .uk-alert-danger(uk-alert='')
+               a.uk-alert-close(uk-close='')
+               p= message
+         form.uk-form-horizontal.uk-margin-large(action='/login' method='POST' style='text-align: left')
+            .uk-margin
+               .uk-inline
+                  span.uk-form-icon(uk-icon="icon: user")
+                  input.uk-input(type="text", name='username', placeholder='Username', autocomplete ='off' required)
+            .uk-margin
+               .uk-inline
+                  span.uk-form-icon(uk-icon="icon: lock")
+                  input.uk-input(type="password", name='password', placeholder='Password', autocomplete ='off' required)
+            button.uk-button.uk-button-default(type='submit') LOGIN
+      script.
+         $(document).ready(function(){
+         
+         })
