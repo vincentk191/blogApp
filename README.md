@@ -46,7 +46,7 @@ node index.js
          - Comment <-(One topic)- Topic
          - Topic <-(One user)- User
          - Topic <-(Many comments)- Comment
- ![banner](https://github.com/vincentk191/blogApp/blob/SQL/public/images/screenshot.png?raw=true)
+ ![banner](https://github.com/vincentk191/blogApp/blob/master/public/images/screenshot.png?raw=true)
 
  2. Routes:
       -  Two Routes will be required for each form page, one to direct the user to the page
