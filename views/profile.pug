@@ -1,7 +1,7 @@
 doctype html
 html
    head
-      title
+      title #{user.username}
       meta(charset='utf-8')
       meta(name="viewport" content="width=device-width, initial-scale=1")
       link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
@@ -68,7 +68,7 @@ html
                each comment in comments
                   tr
                      td
-                        a.uk-link-reset(href=`/topic/${comment.dataValues.topicId}`) #{comment.dataValues.info}
+                        a.uk-link-reset(href=`/topic/${comment.dataValues.topicId}`) #{comment.dataValues.topic.title}
                      td
                         | #{comment.dataValues.info.slice(0,200)}
                         span ...
