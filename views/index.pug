@@ -67,7 +67,7 @@ html
                each topic in topics
                   tr
                      td
-                        a.uk-link.uk-button-text(href=`/users/${topic.dataValues.user.id}`)= topic.dataValues.user.username
+                        a.uk-link-reset(href=`/users/${topic.dataValues.user.id}`)= topic.dataValues.user.username
                      td
                         a.uk-link-reset(href=`/topic/${topic.id}`) #{topic.title}
                      td

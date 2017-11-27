@@ -1,7 +1,7 @@
 doctype html
 html
    head
-      title #{user.username}
+      title #{user.dataValues.username}
       meta(charset='utf-8')
       meta(name="viewport" content="width=device-width, initial-scale=1")
       link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
@@ -34,7 +34,7 @@ html
                   li
                      a(href='/users/new') Sign up
       .row(style='margin-left: 10px')
-         h1.display-4 #{user.username}
+         h1.display-4 #{user.dataValues.username}
          //- if delete
          //-    button.uk-button.uk-button-danger Delete Account
          ul.uk-subnav.uk-subnav-pill(uk-switcher='animation: uk-animation-fade')

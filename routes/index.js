@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const model = require('../models');
+const bcrypt = require('bcrypt');
 
+// Index route
 router.get('/', (req, res) => {
    model.Topic.allTopics()
    .then(data => {
@@ -35,15 +37,18 @@ router.post('/login', (req, res) => {
    const username = req.body.username
    const password = req.body.password
 
-   db.login(username)
+   model.User.login(username)
    .then((loggeduser) => {
       if (loggeduser) {
          bcrypt.compare(password, loggeduser.password, (err,data) => {
             if (err) {
                throw err;
-            } else {
+            }
+            if (data) {
                req.session.user = loggeduser;
                res.redirect('/?message='+'You are now logged in!');
+            } else {
+               res.redirect('/login/?message=' + 'Incorrect password!')
             }
          });
       } else {
@@ -61,213 +66,85 @@ router.get('/users/new', (req,res) => {
 });
 
 router.post('/users/new', (req, res) => {
-   const users = {
+   const user = {
       username: req.body.username,
       password: req.body.password1,
       confirmpwd: req.body.password2,
       useremail: req.body.email
    }
 
-
-   db.login(users.username)
-   .then(data => {
-      if(!data){
-         if(users.password === users.confirmpwd){
-            const checkUser = User.build({
-               username: users.username,
-               password: users.password,
-               email: users.useremail
-            })
-
-            checkUser.validate()
-               .then(() => {
-                  bcrypt.hash(users.password, 8, (err,hash) => {
-                     if (err) {
-                        throw err;
-                     } else {
-                        checkUser.update({
-                           username: users.username,
-                           email: users.useremail,
-                           password: hash
-                        });
-                     }
-                  });
-               })
-               .then(() => {
-                  checkUser.save().then(() => {
-                     req.session.user = checkUser;
-                     res.redirect('/?message='+'You are now logged in!');
-                  })
-               })
-               .catch(err => {
-                  console.log(err);
-                  let email = err.errors.filter(msg => {
-                        return msg.path === 'email';
-                  })
-
-                  let pwd = err.errors.filter(msg => {
-                        return msg.path === 'password';
-                  })
-
-                  res.render('signup', {
-                     email: users.useremail,
-                     username: users.username,
-                     emailMessage: email[0],
-                     pwdMessage: pwd[0],
-                     email: users.useremail,
-                     username: users.username
-                  });
-               });
-         } else {
-            res.render('signup', {
-               message: 'Password does not match original password',
-               email: users.useremail,
-               username: users.username
-            });
-         }
-      } else {
-         res.render('signup', {
-            userMessage: 'Username is taken',
-            email: users.useremail,
-            username: "",
-         });
-      }
-   })
+   model.User.verify(user,req,res);
 });
 
 // Add a topic
-
 router.get('/topic/add' , (req,res) => {
    const loggeduser = req.session.user;
    res.render('addTopic', {loggeduser:loggeduser});
 });
 
-// Add a comment
+router.post('/topic/add' , (req,res) => {
+   const topic = {
+      userId: req.session.user.id,
+      title: req.body.title,
+      info: req.body.body
+   }
 
-router.post('/topic/:id/add', (req,res) => {
-   const comment = req.body.comment;
-   const userId = req.session.user.id;
-   const topic = req.params.id;
-
-   Comment.create({
-      info: comment,
-      userId: userId,
-      topicId: topic
-   }).then(data => {
-      res.redirect(`/topic/${topic}`);
+   model.Topic.createTopic(topic).then(() => {
+      res.redirect('/');
    });
 });
 
-router.post('/topic/add' , (req,res) => {
-   const userId = req.session.user.id;
-   const title = req.body.title;
-   const info = req.body.body;
+// Add a comment
+router.post('/topic/:id/add', (req,res) => {
+   const comment = {
+      info: req.body.comment,
+      userId: req.session.user.id,
+      topic: req.params.id
+   }
 
-   Topic.create({
-      title: title,
-      info: info,
-      userId: userId
-   }).then(data => {
-      res.redirect('/');
+   model.Comment.createComment(comment).then(() => {
+      res.redirect(`/topic/${comment.topic}`);
    });
 });
 
 // View a topic
 router.get('/topic/:id', (req,res) => {
-   const loggeduser = req.session.user;
    const topic = req.params.id;
 
    Promise.all([
-      Topic.findOne({
-         where: {
-            id: topic
-         },
-         include: [{
-            model: User
-         }]
-      }),
-      Comment.findAll({
-         where: {
-            topicId: topic
-         },
-         include: {
-            model: User
-         },
-         order: [['createdAt', 'ASC']]
-      })
+      model.Topic.findTopic(topic),
+      model.Comment.findTopic(topic)
    ])
    .then(data => {
       res.render('topic', {
-         loggeduser: loggeduser,
+         loggeduser: req.session.user,
          topic: data[0],
          comments: data[1]
       });
+   }).catch(err => {
+      console.log(err);
    })
 });
 
-// // Delete account
-// router.get('/users/:id/delete', (req, res) => {
-//    const loggeduser = req.session.user;
-//    const username = req.params.id;
-//
-//    if (loggeduser.id === id || loggeduser.username === 'admin') {
-//       User.destroy({
-//          where: {
-//             username: username
-//          }
-//       }).then(output => res.render('/?message='+'Profile Deleted Successfully!'), console.error);
-//    } else {
-//       // You are not authorized for this yet.
-//    }
-//
-// });
-
-// // Edit profile page (JQUERY)
-// router.post('/users/:id/edit', (req, res) => {
-//    const comments = req.body.Comments;
-//    const topics = req.body.Topics;
-//
-//    Promise.all([,])
-//    User.update({
-//       comments: comments,
-//       info: info
-//    }).then((err) => {
-//       res.send(err);
-//    })
-// });
-
 // User profiles
 router.get('/users/:id', (req, res) => {
-   const loggeduser = req.session.user
    const usernameId = req.params.id
+
    Promise.all([
-      User.findOne({
-         where: {
-            id: usernameId
-         }
-      }),
-      Comment.findAll({
-         where: {
-            userId: usernameId
-         },
-         include: {
-            model: Topic
-         }
-      }),
-      Topic.findAll({
-         where: {
-            userId: usernameId
-         }
-      })
+      model.User.findUser(usernameId),
+      model.Comment.findUser(usernameId),
+      model.Topic.findUser(usernameId)
    ])
    .then(data => {
       res.render('profile', {
-         loggeduser: loggeduser,
-         user: data[0].dataValues,
+         loggeduser: req.session.user,
+         user: data[0],
          comments: data[1],
          topics: data[2]
       });
-   });
+   }).catch(err => {
+      console.log(err);
+   })
 });
 
 module.exports = router;

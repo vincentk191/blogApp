@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const Sequelize = require('sequelize');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const bcrypt = require('bcrypt');
 const model = require('./models');
 
 //-----------------CONFIGURATION------------------
@@ -26,12 +25,6 @@ app.use(session({
    resave: false
 }))
 //-------------------------------------------------
-// Setting local session variable
-// app.use((req, res) => {
-//    if(req.session.user){
-//       res.locals.user = req.session.user;
-//    }
-// })
 
 // Routes
 app.set('view engine', 'pug');

@@ -20,13 +20,6 @@ Topic.belongsTo(User, {onDelete: 'CASCADE' });
 Topic.hasMany(Comment, {onDelete: 'CASCADE' });
 Comment.belongsTo(Topic, {onDelete: 'CASCADE' });
 
-// module.exports = {
-//    sequelize: sequelize,
-//    User: User,
-//    Topic: Topic,
-//    Comment: Comment
-// }
-
 exports.sequelize = sequelize;
 exports.Topic = Topic;
 exports.Comment = Comment;
