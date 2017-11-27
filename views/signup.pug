@@ -1,7 +1,7 @@
 doctype html
 html
    head
-      title
+      title BlogApp | Sign Up
       meta(charset='utf-8')
       meta(name="viewport" content="width=device-width, initial-scale=1")
       link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
@@ -23,15 +23,61 @@ html
          form.uk-form-horizontal.uk-margin-large(action='/users/new' method='POST' style='text-align: left')
             .uk-margin
                label.uke-form-label(for="form-horizontal-text") Username
-                  input.uk-input(type="text", name='username', placeholder='Username, (will be shown as your main name)' required)
+                  input.uk-input#username(type="text", name='username', placeholder='Username, (will be shown as your main name)',value=`${username}`, autocomplete='off' required)
+                  if userMessage
+                     .uk-alert-danger(uk-alert='')
+                        a.uk-alert-close(uk-close='') 
+                        p= userMessage 
             .uk-margin
                label.uke-form-label(for="form-horizontal-text") Email
-                  input.uk-input(type="text", name='email', placeholder='Enter email..' required)
+                  input.uk-input#email(type="text", name='email', placeholder='Enter email..',value=`${email}`, autocomplete='off' required)
+                  if emailMessage
+                     .uk-alert-danger(uk-alert='')
+                        a.uk-alert-close(uk-close='') 
+                        p #{emailMessage.message}
             .uk-margin
                label.uke-form-label(for="form-horizontal-text") Password
-                  input.uk-input(type="password", name='password1', placeholder='Enter password..' required)
+                  input.uk-input#password(type="password", name='password1', placeholder='Enter password..', autocomplete='off' required)
+                  if pwdMessage
+                     .uk-alert-danger(uk-alert='')
+                        a.uk-alert-close(uk-close='') 
+                        p #{pwdMessage.message}
+            .uk-margin
+               label.uke-form-label(for="form-horizontal-text") Confirm Password
+                  input.uk-input#confirmpwd(type="password", name='password2', placeholder='Enter password..', autocomplete='off' required)
+                  if message
+                     .uk-alert-danger(uk-alert='')
+                        a.uk-alert-close(uk-close='') 
+                        p= message 
             button.uk-button.uk-button-default(type='submit') Create Account
       script.
          $(document).ready(function(){
-         
+            $('button.uk-button.uk-button-default').hide();
+            /*Data validation*/
+            
+            var submit = true;
+            
+            /*Username*/
+            $('input.uk-input#username').keyup(function(){
+               
+            })
+            
+            /*Email*/
+            $('input.uk-input#email').keyup(function(){
+               
+            })
+            
+            /*Password*/
+            $('input.uk-input#password').keyup(function(){
+               
+            })
+            
+            /*Confirm Password*/
+            $('input.uk-input#confirmpwd').keyup(function(){
+               
+            })
+            
+            if(submit){
+               $('button.uk-button.uk-button-default').show();
+            }
          })

@@ -1,7 +1,7 @@
 doctype html
 html
    head
-      title
+      title BlogApp | Topic
       meta(charset='utf-8')
       meta(name="viewport" content="width=device-width, initial-scale=1")
       link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
@@ -9,7 +9,7 @@ html
       script(src="js/uikit-icons.min.js")
       script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
    body.container-fluid
-      if user
+      if loggeduser
          nav.uk-navbar-container.uk-navbar(uk-navbar='mode: click')
             .uk-navbar-left
                ul.uk-navbar-nav#navigation
@@ -56,7 +56,7 @@ html
                      .uk-comment-body
                         p= comment.info
                   hr.uk-divider-icon
-               if user
+               if loggeduser
                   form.uk-grid-small(method='POST', action=`/topic/${topic.id}/add` uk-grid)
                      .uk-margin
                         div(class='uk-width-1-2@s')

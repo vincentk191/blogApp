@@ -1,7 +1,7 @@
 doctype html
 html
    head
-      title
+      title BlogApp | Home
       meta(charset='utf-8')
       meta(name="viewport" content="width=device-width, initial-scale=1")
       link(rel='stylesheet', type='text/css', href='/css/uikit.min.css')
@@ -67,7 +67,7 @@ html
                each topic in topics
                   tr
                      td
-                        a.uk-link.uk-button-text(href=`/users/${topic.dataValues.user.id}`)= topic.dataValues.user.username
+                        a.uk-link-reset(href=`/users/${topic.dataValues.user.id}`)= topic.dataValues.user.username
                      td
                         a.uk-link-reset(href=`/topic/${topic.id}`) #{topic.title}
                      td
