@@ -5,7 +5,9 @@ A website that allows people to post comments and topics to a page.
 > _Commented out lines are left due to some additional functionalities I would like to work on._
 
 ### Added Features:
+
    - BCrypt
+
    - Data validation:
       - Username field cannot be empty and must be unique  
 
@@ -14,6 +16,8 @@ A website that allows people to post comments and topics to a page.
       - For registration, the 'confirm password' and 'password' fields must match each other
 
 ## Prerequisites
+
+>_Users must be logged in to be able to leave comments on a topic._
 
 Requires your environment variables to be set to a default value of your USER and PASSWORD (if you have one).
 
