@@ -1,9 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('blogapp', process.env.POSTGRES_USER, null, {
-   host: 'localhost',
-   dialect: 'postgres',
-   storage: './session.postgres'
-});
+const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 const User = sequelize.import('./user.js');
 const Topic = sequelize.import('./topic.js');
