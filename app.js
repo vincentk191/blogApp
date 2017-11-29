@@ -15,14 +15,14 @@ app.use(bodyParser.urlencoded({
 }));
 //-----------------SESSION STORE-------------------
 app.use(session({
+   secret: "safe",
+   saveUninitialized: true,
+   resave: false,
    store: new SequelizeStore({
       db: model.sequelize,
       checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds.
       expiration: 60 * 60 * 1000 // The maximum age (in milliseconds) of a valid session.
-   }),
-   secret: "safe",
-   saveUnitialized: false,
-   resave: false
+   })
 }))
 //-------------------------------------------------
 
