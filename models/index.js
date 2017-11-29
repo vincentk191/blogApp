@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DATABASE_URL);
+sequelize.sync();
 
 const User = sequelize.import('./user.js');
 const Topic = sequelize.import('./topic.js');
