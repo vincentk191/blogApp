@@ -63,7 +63,11 @@ module.exports = (sequelize, DataTypes) => {
 
       return Promise
          .all([
-            model.User.findUser(usernameId),
+            User.findOne({
+               where:{
+                  id: usernameId
+               }
+            }),
             model.Comment.findUser(usernameId),
             model.Topic.findUser(usernameId)
          ])
