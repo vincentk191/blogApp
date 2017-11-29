@@ -23,8 +23,8 @@
     "sequelize": "^4.22.5"
   },
   "engines": {
-     "node":"8.5.0"
- },
+    "node": "8.5.0"
+  },
   "bugs": {
     "url": "https://github.com/vincentk191/bulletinBoard/issues"
   },
