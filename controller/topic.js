@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
             });
          });
 
-      console.log(result);
+      console.log(__dirname);
       return result;
    }
 

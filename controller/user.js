@@ -15,8 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       const username = req.body.username
       const password = req.body.password
 
-      console.log(username);
-
       return User
          .findOne({
             where: {

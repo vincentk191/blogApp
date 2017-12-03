@@ -1,7 +1,5 @@
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DATABASE_URL);
-sequelize.sync();
-
 const User = sequelize.import('./user.js');
 const Topic = sequelize.import('./topic.js');
 const Comment = sequelize.import('./comment.js');
@@ -16,6 +14,10 @@ Topic.belongsTo(User, {onDelete: 'CASCADE' });
 
 Topic.hasMany(Comment, {onDelete: 'CASCADE' });
 Comment.belongsTo(Topic, {onDelete: 'CASCADE' });
+
+console.log(module.filename);
+
+sequelize.sync();
 
 exports.sequelize = sequelize;
 exports.Topic = Topic;
